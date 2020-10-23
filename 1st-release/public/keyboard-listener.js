@@ -8,8 +8,6 @@ export default function createKeyboardListener() {
   }
 
   function notifyAll(command) {
-    console.log(`keyboardListener -> Notifying ${state.observers.length} observers`)
-
     for (const observerFunction of state.observers) {
       observerFunction(command)
     }
