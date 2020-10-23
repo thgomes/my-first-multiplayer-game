@@ -72,6 +72,8 @@ export default function createGame() {
 
 
   function movePlayer(command) {
+    notifyAll(command)
+
     console.log(`game.movePlayer() -> Moving ${command.playerId} with ${command.keyPressed}`)
 
     const acceptedMoves = {

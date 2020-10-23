@@ -28,7 +28,16 @@ sockets.on('connection', (socket) => {
   socket.on('disconnect', () => {
     game.removePlayer({ playerId: playerId })
   })
+
+  socket.on('move-player', (command) => {
+    command.playerId = playerId
+    command.type = 'move-player'
+
+    game.movePlayer(command)
+  })
 })
+
+
 
 
 server.listen(3000, () => {
