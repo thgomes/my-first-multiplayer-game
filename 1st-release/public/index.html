@@ -7,20 +7,50 @@
       body {
         background-color: #282a36;
       }
-      
+      #game {
+        display: flex;
+        margin-top: 48px;
+        justify-content: space-evenly;
+      }
       #screen {
-        border: 10px solid #50fa7b;
+        border: 6px solid #50fa7b;
         image-rendering: pixelated;
         image-rendering: crisp-edges;
         image-rendering: -moz-crisp-edges;
-        width: 400px;
-        height: 400px;
+        width: 600px;
+        height: 600px;
+      }
+      #score-list {
+        border: 6px solid #50fa7b;
+        width: 280px;
+        height: 600;
+        color: #ff79c6;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+      #score-list h2 {
+        text-align: center;
+      }
+      #score-list ul {
+        padding: 0;
+      }
+      #score-list li {
+        color: #f8f8f2;
+        list-style: none;
+        display: flex;
+        justify-content: space-around;
+        margin-bottom: 8px;
+        font-weight: bold;
       }
     </style>
     <script src="/socket.io/socket.io.js"></script>
   </head>
   <body>
-    <canvas id="screen" width="10" height="10"></canvas>
+    <div id="game">
+      <canvas id="screen" width="16" height="16"></canvas>
+      <div id="score-list">
+      </div>
+    </div>
+
 
     <script type="module">
       import createGame from './game.js'
@@ -40,7 +70,9 @@
         console.log(`Player connected on Client with id: ${playerId}`)
 
         const screen = document.getElementById('screen')
-        renderScreen(screen, game, requestAnimationFrame, playerId)
+        const scoreList = document.getElementById('score-list')
+
+        renderScreen(screen, game, requestAnimationFrame, playerId, scoreList)
       })
 
       socket.on('setup', (state) => {
@@ -72,6 +104,21 @@
         if (playerId !== command.playerId) {
           game.movePlayer(command)
         }
+      })
+
+      socket.on('add-fruit', (command) => {
+        console.log(`Receiving ${command.type} -> ${command.fruitId}`)
+        game.addFruit(command)
+      })
+
+      socket.on('remove-fruit', (command) => {
+        console.log(`Receiving ${command.type} -> ${command.fruitId}`)
+        game.removeFruit(command)
+      })
+
+      socket.on('add-point', (command) => {
+        console.log(`Receiving ${command.type} -> ${command.playerId}`)
+        game.addPoint(command)
       })
       
     </script>
